@@ -1,0 +1,16 @@
+{
+  "name": "follow-builders-enhanced-scripts",
+  "version": "1.0.0",
+  "description": "Enhanced scripts for Follow Builders with Reddit and YouTube support",
+  "type": "module",
+  "scripts": {
+    "generate-feed": "node generate-feed.js",
+    "generate-feed-reddit": "node generate-feed-reddit.js",
+    "generate-feed-youtube": "node generate-feed-youtube.js",
+    "prepare-digest": "node prepare-digest-enhanced.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "proper-lockfile": "^4.1.0"
+  }
+}

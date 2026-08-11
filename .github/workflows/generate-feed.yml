@@ -1,0 +1,72 @@
+name: Generate Enhanced Feeds
+
+on:
+  schedule:
+    # Run daily at 6:17am UTC (same as original follow-builders)
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'What to fetch'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - tweets-only
+          - podcasts-only
+          - blogs-only
+          - reddit-only
+          - youtube-only
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: cd scripts && npm install
+
+      - name: Generate feeds
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          POD2TXT_API_KEY: ${{ secrets.POD2TXT_API_KEY }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            mode="${{ inputs.mode }}"
+            if [ "$mode" = "tweets-only" ]; then
+              cd scripts && node generate-feed.js --tweets-only
+            elif [ "$mode" = "podcasts-only" ]; then
+              cd scripts && node generate-feed.js --podcasts-only
+            elif [ "$mode" = "blogs-only" ]; then
+              cd scripts && node generate-feed.js --blogs-only
+            elif [ "$mode" = "reddit-only" ]; then
+              cd scripts && node generate-feed-reddit.js
+            elif [ "$mode" = "youtube-only" ]; then
+              cd scripts && node generate-feed-youtube.js
+            else
+              cd scripts && node generate-feed.js
+              cd scripts && node generate-feed-reddit.js
+              cd scripts && node generate-feed-youtube.js
+            fi
+          else
+            cd scripts && node generate-feed.js
+            cd scripts && node generate-feed-reddit.js
+            cd scripts && node generate-feed-youtube.js
+          fi
+
+      - name: Commit and push feeds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add feed-x.json feed-podcasts.json feed-blogs.json feed-reddit.json feed-youtube.json state-feed.json
+          git diff --cached --quiet || git commit -m "chore: update enhanced feeds [skip ci]"
+          git push
