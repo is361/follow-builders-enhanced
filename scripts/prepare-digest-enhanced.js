@@ -30,9 +30,8 @@ const FEED_PODCASTS_URL = 'https://raw.githubusercontent.com/zarazhangrui/follow
 const FEED_BLOGS_URL = 'https://raw.githubusercontent.com/zarazhangrui/follow-builders/main/feed-blogs.json';
 
 // Enhanced feeds (Reddit + YouTube) - FROM YOUR REPO
-// TODO: Replace with your GitHub username
-const FEED_REDDIT_URL = 'https://raw.githubusercontent.com/YOUR-USERNAME/follow-builders-enhanced/main/feed-reddit.json';
-const FEED_YOUTUBE_URL = 'https://raw.githubusercontent.com/YOUR-USERNAME/follow-builders-enhanced/main/feed-youtube.json';
+const FEED_REDDIT_URL = 'https://raw.githubusercontent.com/is361/follow-builders-enhanced/main/feed-reddit.json';
+const FEED_YOUTUBE_URL = 'https://raw.githubusercontent.com/is361/follow-builders-enhanced/main/feed-youtube.json';
 
 const PROMPTS_BASE = 'https://raw.githubusercontent.com/zarazhangrui/follow-builders/main/prompts';
 const PROMPT_FILES = [
